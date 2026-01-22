@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Disqualifying Marks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📉 (F) Disqualifying Marks by Module</h2>
+        <a href="/reports_hub" class="btn btn-outline-secondary">Back to Reports</a>
+    </div>
+
+    <div class="alert alert-warning shadow-sm">
+        <strong>Rule:</strong> The disqualifying mark is calculated as <strong>60% of the class average</strong> for each specific exam/module.
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Course ID</th>
+                    <th>Assessment Type</th>
+                    <th>Class Average</th>
+                    <th class="text-warning">Threshold (0.6 * Avg)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in data %}
+                <tr>
+                    <td>Course #{{ r.course_id }}</td>
+                    <td><span class="badge bg-secondary">{{ r.mark_type }}</span></td>
+                    <td>{{ (r.threshold / 0.6) | round(2) }}</td>
+                    <td class="fw-bold text-danger">{{ r.threshold | round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

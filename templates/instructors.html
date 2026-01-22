@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head><title>Instructor Management</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body class="bg-light"><div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>👨‍🏫 Instructor Records</h2>
+        <a href="/crud" class="btn btn-secondary">Back to Hub</a>
+    </div>
+
+    <div class="card shadow-sm mb-4"><div class="card-body">
+        <form method="POST" class="row g-3">
+            <div class="col-md-2"><input type="number" name="dept_id" placeholder="Dept ID" class="form-control" required></div>
+            <div class="col-md-3"><input type="text" name="first_name" placeholder="First Name" class="form-control" required></div>
+            <div class="col-md-3"><input type="text" name="last_name" placeholder="Last Name" class="form-control" required></div>
+            <div class="col-md-2">
+                <select name="rank" class="form-select">
+                    <option value="PROF">PROF</option><option value="MCA">MCA</option>
+                    <option value="MCB">MCB</option><option value="Substitute">Substitute</option>
+                </select>
+            </div>
+            <div class="col-md-2"><input type="email" name="email" placeholder="Email" class="form-control"></div>
+            <div class="col-md-3"><input type="text" name="phone" placeholder="Phone" class="form-control"></div>
+            <div class="col-md-3"><input type="text" name="fax" placeholder="Fax" class="form-control"></div>
+            <div class="col-12"><button type="submit" class="btn btn-success w-100">Add Instructor</button></div>
+        </form>
+    </div></div>
+
+    <table class="table table-hover bg-white shadow-sm">
+        <thead class="table-dark"><tr><th>ID</th><th>Dept</th><th>Name</th><th>Rank</th><th>Actions</th></tr></thead>
+        <tbody>
+            {% for i in instructors %}
+            <tr>
+                <td>{{ i.instructor_id }}</td><td>{{ i.department_id }}</td>
+                <td>{{ i.first_name }} {{ i.last_name }}</td><td>{{ i.rank }}</td>
+                <td>
+                    <a href="/edit_instructor/{{ i.instructor_id }}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/delete_instructor/{{ i.instructor_id }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div></body></html>
