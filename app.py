@@ -192,8 +192,9 @@ def delete_room(bld, rm):
 def manage_enrollments():
     conn = get_db_connection(); cur = conn.cursor(cursor_factory=RealDictCursor)
     if request.method == 'POST':
-        cur.execute("INSERT INTO public.enrollment (student_id, course_id, department_id) VALUES (%s, %s, %s)",
-                    (request.form['sid'], request.form['cid'], request.form['did']))
+       # Use dept_id to match the database dump
+cur.execute("INSERT INTO public.enrollment (student_id, course_id, dept_id) VALUES (%s, %s, %s)",
+            (request.form['sid'], request.form['cid'], request.form['did']))
         conn.commit()
         return redirect(url_for('manage_enrollments'))
     cur.execute('SELECT * FROM public.enrollment ORDER BY enrollment_date DESC')
@@ -517,4 +518,5 @@ def report_g():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
 
