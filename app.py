@@ -11,7 +11,14 @@ app = Flask(__name__)
 def get_db_connection():
     database_url = os.environ.get('DATABASE_URL')
     return psycopg2.connect(database_url)
-
+# This runs every time the app starts, so you don't need the Shell
+from init_db import init_db
+try:
+    init_db()
+    print("Database sync successful")
+except Exception as e:
+    print(f"Database sync failed: {e}")
+    
 # --- 2. NAVIGATION ROUTES ---
 @app.route('/')
 def index():
@@ -510,3 +517,4 @@ def report_g():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
