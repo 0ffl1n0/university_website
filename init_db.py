@@ -12,6 +12,21 @@ def init_db():
     cur = conn.cursor()
     
     sql_script = """
+
+    -- 1. CLEANUP (Delete old versions to fix "Column not found" errors)
+    DROP MATERIALIZED VIEW IF EXISTS public.mv_reservations_per_teacher CASCADE;
+    DROP TABLE IF EXISTS public.audit_logs CASCADE;
+    DROP TABLE IF EXISTS public.reservation CASCADE;
+    DROP TABLE IF EXISTS public.attendance CASCADE;
+    DROP TABLE IF EXISTS public.mark CASCADE;
+    DROP TABLE IF EXISTS public.enrollment CASCADE;
+    DROP TABLE IF EXISTS public.course_activity CASCADE;
+    DROP TABLE IF EXISTS public.instructor CASCADE;
+    DROP TABLE IF EXISTS public.course CASCADE;
+    DROP TABLE IF EXISTS public.student CASCADE;
+    DROP TABLE IF EXISTS public.room CASCADE;
+    DROP TABLE IF EXISTS public.department CASCADE;
+    
     -- 1. DEPARTMENT
     CREATE TABLE IF NOT EXISTS public.department (
         department_id SERIAL PRIMARY KEY,
@@ -149,3 +164,4 @@ def init_db():
 
 if __name__ == "__main__":
     init_db()
+
