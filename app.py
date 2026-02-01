@@ -2,16 +2,15 @@ from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+import os  # <--- ADD THIS LINE
+
 app = Flask(__name__)
 
 # --- 1. DATABASE CONNECTION ---
+# DELETE your old get_db_connection() and REPLACE it with this:
 def get_db_connection():
-    return psycopg2.connect(
-        host="localhost",
-        database="uniafter",
-        user="postgres",
-        password="zaza" 
-    )
+    database_url = os.environ.get('DATABASE_URL')
+    return psycopg2.connect(database_url)
 
 # --- 2. NAVIGATION ROUTES ---
 @app.route('/')
@@ -509,4 +508,5 @@ def report_g():
 
 
 if __name__ == '__main__':
+
     app.run(debug=True)
