@@ -165,21 +165,21 @@ def init_db():
 
     -- 3. CREATE INSTRUCTOR TABLE (Fixed structure)
     -- Note: This requires the 'department' table to exist
-    CREATE TABLE public.instructor (
+CREATE TABLE public.instructor (
         instructor_id SERIAL PRIMARY KEY,
+        department_id INTEGER REFERENCES public.department(department_id),
         last_name VARCHAR(50),
         first_name VARCHAR(50),
         email VARCHAR(100) UNIQUE,
-        office_no VARCHAR(20),
-        department_id INTEGER REFERENCES public.department(department_id) ON DELETE SET NULL
+        office_no VARCHAR(20), -- This is what 'rank' will save into
+        phone VARCHAR(20),
+        fax VARCHAR(20)
     );
 
-    -- 4. CREATE ENROLLMENT TABLE (Fixed structure)
-    -- Note: This links Students to Courses
     CREATE TABLE public.enrollment (
         student_id INTEGER REFERENCES public.student(student_id) ON DELETE CASCADE,
         course_id INTEGER,
-        dept_id INTEGER,
+        dept_id INTEGER, -- Matches the 'did' from your form
         enrollment_date DATE DEFAULT CURRENT_DATE,
         PRIMARY KEY (student_id, course_id, dept_id),
         FOREIGN KEY (course_id, dept_id) REFERENCES public.course(course_id, department_id) ON DELETE CASCADE
@@ -200,4 +200,5 @@ def init_db():
 if __name__ == "__main__":
     init_db()
     
+
 
