@@ -149,14 +149,49 @@ def init_db():
     FROM public.instructor i
     LEFT JOIN public.reservation r ON i.instructor_id = r.instructor_id
     GROUP BY i.instructor_id, i.first_name, i.last_name;
+    
+    -- 1. RESET THE REMAINING 3 TABLES
+    DROP TABLE IF EXISTS public.enrollment CASCADE;
+    DROP TABLE IF EXISTS public.instructor CASCADE;
+    DROP TABLE IF EXISTS public.room CASCADE;
+
+    -- 2. CREATE ROOM TABLE (Fixed structure)
+    CREATE TABLE public.room (
+        building VARCHAR(1) NOT NULL,
+        room_no VARCHAR(10) NOT NULL,
+        capacity INTEGER CHECK (capacity > 1),
+        PRIMARY KEY (building, room_no)
+    );
+
+    -- 3. CREATE INSTRUCTOR TABLE (Fixed structure)
+    -- Note: This requires the 'department' table to exist
+    CREATE TABLE public.instructor (
+        instructor_id SERIAL PRIMARY KEY,
+        last_name VARCHAR(50),
+        first_name VARCHAR(50),
+        email VARCHAR(100) UNIQUE,
+        office_no VARCHAR(20),
+        department_id INTEGER REFERENCES public.department(department_id) ON DELETE SET NULL
+    );
+
+    -- 4. CREATE ENROLLMENT TABLE (Fixed structure)
+    -- Note: This links Students to Courses
+    CREATE TABLE public.enrollment (
+        student_id INTEGER REFERENCES public.student(student_id) ON DELETE CASCADE,
+        course_id INTEGER,
+        dept_id INTEGER,
+        enrollment_date DATE DEFAULT CURRENT_DATE,
+        PRIMARY KEY (student_id, course_id, dept_id),
+        FOREIGN KEY (course_id, dept_id) REFERENCES public.course(course_id, department_id) ON DELETE CASCADE
+    );
     """
     
     try:
         cur.execute(sql_script)
         conn.commit()
-        print("Success: Database fully initialized with all 10 tables, view, and constraints!")
+        print("Enrollments, Rooms, and Instructors fixed!")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"Error: {e}")
         conn.rollback()
     finally:
         cur.close()
@@ -164,4 +199,5 @@ def init_db():
 
 if __name__ == "__main__":
     init_db()
+    
 
