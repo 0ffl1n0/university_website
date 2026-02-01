@@ -4,8 +4,7 @@ from psycopg2.extras import RealDictCursor
 
 import os  # <--- ADD THIS LINE
 
-app = Flask(__name__)
-
+app = Flask(__name__) 
 # --- 1. DATABASE CONNECTION ---
 # DELETE your old get_db_connection() and REPLACE it with this:
 def get_db_connection():
@@ -78,7 +77,7 @@ def manage_instructors():
     conn = get_db_connection(); cur = conn.cursor(cursor_factory=RealDictCursor)
     if request.method == 'POST':
         cur.execute("""
-            INSERT INTO public.instructor (department_id, last_name, first_name, rank, phone, fax, email) 
+            INSERT INTO public.instructor (department_id, last_name, first_name, office_no, phone, fax, email) 
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (request.form['dept_id'], request.form['last_name'], request.form['first_name'], 
               request.form['rank'], request.form['phone'], request.form['fax'], request.form['email']))
@@ -518,5 +517,6 @@ def report_g():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
 
 
